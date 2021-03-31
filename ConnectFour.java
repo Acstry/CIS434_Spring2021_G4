@@ -106,6 +106,7 @@ public class ConnectFour {
         checkNum();
     }
 
+//Val worked on this 3/11/21
     static void checkHorizontal() {
         //checks horizontal solution
 
@@ -121,6 +122,7 @@ public class ConnectFour {
 
     }
 
+//Val worked on this 3/11/21
     static void checkVertical() {
         //checks vertical solution
         for(int i = 0; i < 5; i++) {
@@ -134,6 +136,7 @@ public class ConnectFour {
         }
     }
 
+//Val worked on this 3/11/21
     static void checkDiagonalRight() {
         //checks the right diagonal
 
@@ -168,6 +171,7 @@ public class ConnectFour {
 
     }
 
+//Val worked on this 3/11/21
     static void checkDiagonalLeft() {
         //checks the left diagonal
 
@@ -201,6 +205,7 @@ public class ConnectFour {
         }
     }
 
+//Val worked on this 3/11/21
     static void checkNum() {
         //checks to see if the number of coins in a row is 4
         if(num >= 4) {
