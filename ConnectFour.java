@@ -94,6 +94,7 @@ public class ConnectFour {
         }
     }
 
+//Val worked on this 3/11/21
     static void checkSolution() {
         //if winner found, declare winner and exit the game
         checkHorizontal();
