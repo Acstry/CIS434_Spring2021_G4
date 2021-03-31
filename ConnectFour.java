@@ -38,6 +38,7 @@ public class ConnectFour {
         }
     }
 
+//Skhatri worked on this 3/04/21
     static void getOneMove() {
         //ask which row they want to put the coin in -- shown as zeroes on the board
         System.out.println("Player 1: What row do you wish to put your coin in? 1-7?");
@@ -58,7 +59,7 @@ public class ConnectFour {
         }
     }
 
-
+//Skhatri worked on this 3/04/21
     static void getTwoMove() {
         //ask which row they want to put the coin in -- shown as ones on the board
         System.out.println("Player 2: What col do you wish to put your coin in? 1-7?");
@@ -79,7 +80,7 @@ public class ConnectFour {
         }
 
     }
-
+//Skhatri worked on this 3/06/21
     static void printGrid() {
         //prints the current game board
         for(int j=5; j >= 0;j--) {
