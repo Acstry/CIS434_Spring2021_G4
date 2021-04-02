@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 //current version: Connect Four without GUI
-
+//Milica worked on this on 3/01/21
 public class ConnectFour {
     //this program runs a connect four game between two people at the same terminal
 
@@ -12,12 +12,14 @@ public class ConnectFour {
     public static int num; //number of concurrent pieces in a row
     public static int round;
 
+    //Milica worked on this on 3/01/21
     public static void main(String[] args) {
         grid = new int[7][6];
         System.out.println("Player 1 will be represented by 1's, and Player 2 will be represented by 2's");
         num = 0;
         round = 1;
 
+        //Milica worked on this on 3/01/21
         //where the game takes place
         while(true) {
             //red is player 1
