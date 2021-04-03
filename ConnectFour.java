@@ -49,10 +49,11 @@ public class ConnectFour {
         row=row-1;
         curRow = row;
         for(int i=0;i < 7;i++) {
-            if((row < 0) || (row > 7)) {
-                System.out.println("Error, invalid row.");
-                System.exit(0);
-            } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
+            while((row < 0) || (row > 7)) {
+                System.out.println("Error, invalid row. Please try again");
+                row = input.nextInt();
+            } 
+            if((grid[row][i] != 1) && (grid[row][i] != 2)) {
                 grid[row][i] = 1;
                 curCol = i;
                 curCheck = 1;
@@ -70,10 +71,11 @@ public class ConnectFour {
         row=row-1;
         curRow = row;
         for(int i=0;i < 7;i++) {
-            if((row < 0) || (row > 7)) {
-                System.out.println("Error, invalid row.");
-                System.exit(0);
-            } else if ((grid[row][i] != 1) && (grid[row][i] != 2)) {
+            while((row < 0) || (row > 7)) {
+                System.out.println("Error, invalid row. Please try again");
+                row = input.nextInt();
+            }
+            if ((grid[row][i] != 1) && (grid[row][i] != 2)) {
                 grid[row][i] = 2;
                 curCol = i;
                 curCheck = 2;
