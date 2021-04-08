@@ -1,7 +1,9 @@
+package ConnectFour;
+
 import java.util.Scanner;
 
 //current version: Connect Four without GUI
-//Milica worked on this on 3/01/21
+
 public class ConnectFour {
     //this program runs a connect four game between two people at the same terminal
 
@@ -12,14 +14,14 @@ public class ConnectFour {
     public static int num; //number of concurrent pieces in a row
     public static int round;
 
-    //Milica worked on this on 3/01/21
     public static void main(String[] args) {
         grid = new int[7][6];
         System.out.println("Player 1 will be represented by 1's, and Player 2 will be represented by 2's");
         num = 0;
         round = 1;
 
-        //Milica worked on this on 3/01/21
+        new ConnectFourGUI();
+
         //where the game takes place
         while(true) {
             //red is player 1
@@ -40,7 +42,6 @@ public class ConnectFour {
         }
     }
 
-//Skhatri worked on this 3/04/21
     static void getOneMove() {
         //ask which row they want to put the coin in -- shown as zeroes on the board
         System.out.println("Player 1: What row do you wish to put your coin in? 1-7?");
@@ -49,11 +50,10 @@ public class ConnectFour {
         row=row-1;
         curRow = row;
         for(int i=0;i < 7;i++) {
-            while((row < 0) || (row > 7)) {
-                System.out.println("Error, invalid row. Please try again");
-                row = input.nextInt();
-            } 
-            if((grid[row][i] != 1) && (grid[row][i] != 2)) {
+            if((row < 0) || (row > 7)) {
+                System.out.println("Error, invalid row.");
+                System.exit(0);
+            } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
                 grid[row][i] = 1;
                 curCol = i;
                 curCheck = 1;
@@ -62,7 +62,7 @@ public class ConnectFour {
         }
     }
 
-//Skhatri worked on this 3/04/21
+
     static void getTwoMove() {
         //ask which row they want to put the coin in -- shown as ones on the board
         System.out.println("Player 2: What col do you wish to put your coin in? 1-7?");
@@ -71,11 +71,10 @@ public class ConnectFour {
         row=row-1;
         curRow = row;
         for(int i=0;i < 7;i++) {
-            while((row < 0) || (row > 7)) {
-                System.out.println("Error, invalid row. Please try again");
-                row = input.nextInt();
-            }
-            if ((grid[row][i] != 1) && (grid[row][i] != 2)) {
+            if((row < 0) || (row > 7)) {
+                System.out.println("Error, invalid row.");
+                System.exit(0);
+            } else if ((grid[row][i] != 1) && (grid[row][i] != 2)) {
                 grid[row][i] = 2;
                 curCol = i;
                 curCheck = 2;
@@ -84,7 +83,7 @@ public class ConnectFour {
         }
 
     }
-//Skhatri worked on this 3/06/21
+
     static void printGrid() {
         //prints the current game board
         for(int j=5; j >= 0;j--) {
@@ -99,7 +98,6 @@ public class ConnectFour {
         }
     }
 
-//Val worked on this 3/11/21
     static void checkSolution() {
         //if winner found, declare winner and exit the game
         checkHorizontal();
@@ -112,7 +110,6 @@ public class ConnectFour {
         checkNum();
     }
 
-//Val worked on this 3/11/21
     static void checkHorizontal() {
         //checks horizontal solution
 
@@ -128,7 +125,6 @@ public class ConnectFour {
 
     }
 
-//Val worked on this 3/11/21
     static void checkVertical() {
         //checks vertical solution
         for(int i = 0; i < 5; i++) {
@@ -142,7 +138,6 @@ public class ConnectFour {
         }
     }
 
-//Val worked on this 3/11/21
     static void checkDiagonalRight() {
         //checks the right diagonal
 
@@ -177,7 +172,6 @@ public class ConnectFour {
 
     }
 
-//Val worked on this 3/11/21
     static void checkDiagonalLeft() {
         //checks the left diagonal
 
@@ -211,7 +205,6 @@ public class ConnectFour {
         }
     }
 
-//Val worked on this 3/11/21
     static void checkNum() {
         //checks to see if the number of coins in a row is 4
         if(num >= 4) {

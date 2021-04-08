@@ -1,8 +1,8 @@
-import java.awt.*;  
+package ConnectFour;
+import java.awt.*;
 import javax.swing.*;  
 public class ConnectFourGUI {  
-     ConnectFourGUI()  
-        {  
+     ConnectFourGUI() {
         JFrame f= new JFrame("Panel Example");    
         JPanel panel=new JPanel();  
         panel.setBounds(40,80,600,600);    
@@ -27,8 +27,7 @@ public class ConnectFourGUI {
                 f.setLayout(null);    
                 f.setVisible(true);    
         }  
-        public static void main(String args[])  
-        {  
-        new ConnectFourGUI();  
-        }  
+        //public static void main(String args[] {
+            //new ConnectFourGUI();
+        //}
     }  
