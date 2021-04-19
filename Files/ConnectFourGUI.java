@@ -2,6 +2,14 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;  
 public class ConnectFourGUI {  
+
+     public void setColorR(int r, int i){
+	gridButtons[r][i].setBackground(Color.RED);
+
+     }
+
+
+
      ConnectFourGUI() {
         //setup panel
         JFrame f= new JFrame("Connect Four");

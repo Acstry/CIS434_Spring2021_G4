@@ -56,7 +56,7 @@ public class ConnectFour {
                 System.out.println("Error, invalid row.");
                 System.exit(0);
             } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
-             // myGui.gridButtons[row][i].setBackground(Color.RED);
+              myGui.setColorRED(row, i);
 	       //grid[row][i] = 1;
 	       
                 curCol = i;
