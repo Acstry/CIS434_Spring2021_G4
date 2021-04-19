@@ -265,5 +265,21 @@ public class ConnectFour {
             }
         }
     }
+boolean playGame = true;// condition for user to play the game
 
+         while (playGame) { 
+ 
+            System.out.print("How many games would you like to play the best of (best of 3, 5...): ");
+            String bestOf = input.nextLine();
+            int bestOfInt = Integer.parseInt(bestOf);
+    
+            
+                if (bestOfInt == (int)bestOfInt) {
+                    System.out.println("Starting game to play a best of " + bestOf + "...");
+                } else {
+                    System.out.print("Invalid integer, please only enter an integer number of games: ");
+                    bestOf = input.nextLine();
+                    bestOfInt = Integer.parseInt(bestOf);
+                }
+        
 }
