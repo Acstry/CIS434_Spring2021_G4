@@ -38,7 +38,7 @@ public class ConnectFour {
             for (int col = 0; col < 6; col++) {
                 for (int row = 0; row < 7; row++) {
                     gridButtons[row][col] = new JButton("");
-                    gridButtons[row][col].setBounds(50 + (row * 80), 50 + (col * 100), 70, 70);
+                    gridButtons[row][col].setBounds(50 + (row * 80), 550 - (col * 100), 70, 70);
                     gridButtons[row][col].setBackground(Color.LIGHT_GRAY);
                     gridButtons[row][col].setBorder(null);
                     panel.add(gridButtons[row][col]);
