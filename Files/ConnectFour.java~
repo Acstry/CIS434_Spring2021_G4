@@ -1,7 +1,8 @@
-package ConnectFour;
-
+package Files;
 import java.util.Scanner;
-
+import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
+import javax.swing.*;
 //current version: Connect Four without GUI
 
 public class ConnectFour {
@@ -16,17 +17,19 @@ public class ConnectFour {
 
     public static void main(String[] args) {
         grid = new int[7][6];
-        System.out.println("Player 1 will be represented by 1's, and Player 2 will be represented by 2's");
+      //`  System.out.println("Player 1 will be represented by 1's, and Player 2 will be represented by 2's");
         num = 0;
         round = 1;
 
-        new ConnectFourGUI();
+        ConnectFourGUI myGui = new ConnectFourGUI();
+ //       myGui.gridButtons[row][i].setBackground(Color.RED);
+       
 
         //where the game takes place
         while(true) {
             //red is player 1
             getOneMove();
-            printGrid();
+        //  printGrid();
             if(round > 3) {
                 checkSolution();
                 num = 0;
@@ -44,7 +47,7 @@ public class ConnectFour {
 
     static void getOneMove() {
         //ask which row they want to put the coin in -- shown as zeroes on the board
-        System.out.println("Player 1: What row do you wish to put your coin in? 1-7?");
+      //  System.out.println("Player 1: What row do you wish to put your coin in? 1-7?");
         Scanner input = new Scanner(System.in);
         int row = input.nextInt();
         row=row-1;
@@ -54,7 +57,9 @@ public class ConnectFour {
                 System.out.println("Error, invalid row.");
                 System.exit(0);
             } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
-                grid[row][i] = 1;
+             // myGui.gridButtons[row][i].setBackground(Color.RED);
+	       //grid[row][i] = 1;
+	       
                 curCol = i;
                 curCheck = 1;
                 break;
@@ -65,7 +70,7 @@ public class ConnectFour {
 
     static void getTwoMove() {
         //ask which row they want to put the coin in -- shown as ones on the board
-        System.out.println("Player 2: What col do you wish to put your coin in? 1-7?");
+       // System.out.println("Player 2: What col do you wish to put your coin in? 1-7?");
         Scanner input = new Scanner(System.in);
         int row = input.nextInt();
         row=row-1;
