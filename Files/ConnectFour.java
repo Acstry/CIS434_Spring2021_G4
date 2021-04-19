@@ -13,21 +13,63 @@ public class ConnectFour {
     public static int curCheck; //team currently making a move
     public static int num; //number of concurrent pieces in a row
     public static int round;
+    private JButton gridButtons[][];
 
-    public static void main(String[] args) {
+        ConnectFour() {
+            //setup panel
+            JFrame f = new JFrame("Connect Four");
+            JPanel panel = new JPanel();
+            JLabel playerOne = new JLabel("Player 1: Which row do you wish to put your coin in? (1-7)");
+            playerOne.setBounds(150, 10, 350, 30);
+            playerOne.setForeground(Color.RED);
+            JLabel playerTwo = new JLabel("Player 2: Which row do you wish to put your coin in? (1-7)");
+            playerTwo.setBounds(150, 10, 350, 30);
+            playerTwo.setForeground(Color.BLUE);
+            playerTwo.setVisible(false);
+            //	playerOne.setVisible(false);
+            panel.setLayout(null);
+            panel.setBounds(40, 80, 650, 675);
+            //panel decoration
+            panel.setBackground(Color.WHITE);
+            panel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 10));
+
+            //setup buttons
+            gridButtons = new JButton[7][6];
+            for (int col = 0; col < 6; col++) {
+                for (int row = 0; row < 7; row++) {
+                    gridButtons[row][col] = new JButton("");
+                    gridButtons[row][col].setBounds(50 + (row * 80), 50 + (col * 100), 70, 70);
+                    gridButtons[row][col].setBackground(Color.LIGHT_GRAY);
+                    gridButtons[row][col].setBorder(null);
+                    panel.add(gridButtons[row][col]);
+                    panel.add(playerOne);
+                }
+            }
+
+            gridButtons[0][0].setBackground(Color.RED);
+
+            f.setSize(800, 800);
+            f.add(panel);
+            f.setLayout(null);
+            f.setVisible(true);
+            panel.add(playerOne);
+            panel.add(playerTwo);
+        }
+
+        public static void main(String[] args) {
         grid = new int[7][6];
-      //`  System.out.println("Player 1 will be represented by 1's, and Player 2 will be represented by 2's");
+        //`  System.out.println("Player 1 will be represented by 1's, and Player 2 will be represented by 2's");
         num = 0;
         round = 1;
 
-        ConnectFourGUI myGui = new ConnectFourGUI();
- //       myGui.gridButtons[row][i].setBackground(Color.RED);
+        ConnectFour myGui = new ConnectFour();
+        //       myGui.gridButtons[row][i].setBackground(Color.RED);
        
 
         //where the game takes place
         while(true) {
             //red is player 1
-            getOneMove();
+            getOneMove(myGui);
         //  printGrid();
             if(round > 3) {
                 checkSolution();
@@ -44,7 +86,7 @@ public class ConnectFour {
         }
     }
 
-    static void getOneMove() {
+    static void getOneMove(ConnectFour gui) {
         //ask which row they want to put the coin in -- shown as zeroes on the board
       //  System.out.println("Player 1: What row do you wish to put your coin in? 1-7?");
         Scanner input = new Scanner(System.in);
@@ -56,8 +98,8 @@ public class ConnectFour {
                 System.out.println("Error, invalid row.");
                 System.exit(0);
             } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
-              myGui.setColorRED(row, i);
-	       //grid[row][i] = 1;
+                gui.gridButtons[row][i].setBackground(Color.RED);
+	            //grid[row][i] = 1;
 	       
                 curCol = i;
                 curCheck = 1;
