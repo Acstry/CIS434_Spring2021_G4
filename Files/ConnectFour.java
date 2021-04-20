@@ -29,8 +29,8 @@ public class ConnectFour {
         //instantiate 
         f = new JFrame("Connect Four");
         panel = new JPanel();
-       // playerOneAction = new playerOneAction();
-       // playerTwoAction = new playerTwoAction();
+        playerOneAction = new playerOneAction();
+      //  playerTwoAction = new playerTwoAction();
         playerOne.setBounds(150, 10, 350, 30);
         playerOne.setForeground(Color.RED);
         playerTwo.setBounds(150, 10, 350, 30);
@@ -59,6 +59,9 @@ public class ConnectFour {
         f.setVisible(true);
         panel.add(playerOne);
         panel.add(playerTwo);
+                
+	    panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
+    	panel.getActionMap().put("myAction", playerOneAction);
       
         /*f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         f.addKeyListener(new KeyListener() {
@@ -71,6 +74,15 @@ public class ConnectFour {
     */
     }
 	
+    public class playerOneAction extends AbstractAction{
+        @Override  
+        public void actionPerformed(ActionEvent e){
+            int num = e.getKeyCode();
+            getOneMove(e.getKeyStroke());
+            System.out.println("Keystroke is: " + e.getKeyStroke() +"\n" + "Keycode is: " + e.getKeyCode());
+           // gui.gridButtons[row][i].setBackground(Color.RED);
+        }
+    }
      public static void main(String[] args) {
         grid = new int[7][6];
         //System.out.println("Player 1 will be represented by 1's, and Player 2 will be represented by 2's");
@@ -106,31 +118,20 @@ public class ConnectFour {
         int row = 1;
         row=row-1;
         //System.out.println("Player 1 stated ROW:" + row);
-        
-	   /* gui.panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
-    	gui.panel.getActionMap().put("myAction", playerOneAction);
-        Action myAction = new myAction();
-	    System.out.println("Keystroke is: "+ getKeyStroke());
-	    Action myAction = new AbstractAction() {
-		    public void actionPerformed(ActionEvent e) {
-			   System.out.println("Keystroke is: " + getKeyStroke());
-			   gui.gridButtons[row][i].setBackground(Color.RED);
-		    }
-	};*/
+
         curRow = row;
         for(int i=0;i < 7;i++) {
             if((row < 0) || (row > 7)) {
                 System.out.println("Error, invalid row.");
                 System.exit(0);
             } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
-            // gui.gridButtons[row][i].setBackground(Color.RED);
+            gui.gridButtons[row][i].setBackground(Color.RED);
                 curCol = i;
                 curCheck = 1;
                 break;
             }
         }
     }
-
 
     static void getTwoMove() {
         //ask which row they want to put the coin in -- shown as ones on the board
