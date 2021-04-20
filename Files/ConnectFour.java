@@ -59,8 +59,6 @@ public class ConnectFour {
         f.setVisible(true);
         panel.add(playerOne);
         panel.add(playerTwo);
-
-         //setup buttons
       
         /*f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         f.addKeyListener(new KeyListener() {
@@ -80,7 +78,6 @@ public class ConnectFour {
         round = 1;
 
         ConnectFour myGui = new ConnectFour();
-        //Action myACtion = new playerOneAction();
         
         //where the game takes place
         while(true) {
