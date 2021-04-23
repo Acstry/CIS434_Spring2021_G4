@@ -1,16 +1,22 @@
-import java.util.Scanner;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+//import java.util.Scanner;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+//import java.awt.event.KeyEvent;
+//import java.awt.event.KeyListener;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
+//import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
-//current version: Connect Four without GUI
 
+
+
+
+//this program runs a connect four game between two people at the same terminal
 public class ConnectFour {
-    //this program runs a connect four game between two people at the same terminal
 
     public static int[][] grid;
     public static int curRow;
+    public static int row;
+    public static int col;
     public static int curCol;
     public static int curCheck; //team currently making a move
     public static int num; //number of concurrent pieces in a row
@@ -18,28 +24,29 @@ public class ConnectFour {
     public JButton gridButtons[][];
     JFrame f;
     JPanel panel;
+    boolean playerTurn = false; //false means player one's turn, true means player two's turn
     //panel.setFocusable(true);
     //panel.requestFocusInWindow();
-    JLabel playerOne = new JLabel("Player 1: Which row do you wish to put your coin in? (1-7)");
-    JLabel playerTwo = new JLabel("Player 2: Which row do you wish to put your coin in? (1-7)");
-    Action playerOneAction;
-    Action playerTwoAction;
+    static JLabel playerOne = new JLabel("Player 1: Which row do you wish to put your coin in? (1-7)");
+    static JLabel playerTwo = new JLabel("Player 2: Which row do you wish to put your coin in? (1-7)");
+    static Action playerOneAction;
+   // Action playerTwoAction;
 
     ConnectFour() {
-        //instantiate 
+      //instantiate 
         f = new JFrame("Connect Four");
         panel = new JPanel();
         playerOneAction = new playerOneAction();
-      //  playerTwoAction = new playerTwoAction();
+      //playerTwoAction = new playerTwoAction();
         playerOne.setBounds(150, 10, 350, 30);
         playerOne.setForeground(Color.RED);
         playerTwo.setBounds(150, 10, 350, 30);
         playerTwo.setForeground(Color.BLUE);
         playerTwo.setVisible(false);
-        //playerOne.setVisible(false);
+        playerOne.setVisible(true);
         panel.setLayout(null);
         panel.setBounds(40, 80, 650, 675);
-        //sets up grid of buttons
+      //sets up grid of buttons
         gridButtons = new JButton[7][6];
         for (int col = 0; col < 6; col++) {
             for (int row = 0; row < 7; row++) {
@@ -59,87 +66,188 @@ public class ConnectFour {
         f.setVisible(true);
         panel.add(playerOne);
         panel.add(playerTwo);
-                
-	    panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
-    	panel.getActionMap().put("myAction", playerOneAction);
-      
-        /*f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
-        f.addKeyListener(new KeyListener() {
-        public void keyTyped(KeyEvent e) {
-            if(e.getKeyCode() >= 1 || e.getKeyCode() <=7){
-                System.out.println("KEY IS: " + e.getKeyCode()); 
-            }
-        }
-    });
-    */
+        panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
+        panel.getInputMap().put(KeyStroke.getKeyStroke("2"), "myAction");
+        panel.getInputMap().put(KeyStroke.getKeyStroke("3"), "myAction");
+        panel.getInputMap().put(KeyStroke.getKeyStroke("4"), "myAction");
+        panel.getInputMap().put(KeyStroke.getKeyStroke("5"), "myAction");
+        panel.getInputMap().put(KeyStroke.getKeyStroke("6"), "myAction");
+        panel.getInputMap().put(KeyStroke.getKeyStroke("7"), "myAction");
+
+        panel.getActionMap().put("myAction", playerOneAction);      
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
     }
 	
-    public class playerOneAction extends AbstractAction{
-        @Override  
-        public void actionPerformed(ActionEvent e){
-            int num = e.getKeyCode();
-            getOneMove(e.getKeyStroke());
-            System.out.println("Keystroke is: " + e.getKeyStroke() +"\n" + "Keycode is: " + e.getKeyCode());
-           // gui.gridButtons[row][i].setBackground(Color.RED);
+  public class playerOneAction extends AbstractAction{
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+       // getOneMove(e.getKeyStroke());
+       checkSolution();
+       round = 1;
+        playerOne.setText("Player 1: Which row do you wish to put your coin in? (1-7)");
+      //  System.out.println("Keystroke is: " + e.getActionCommand() +"\n");
+        if(round > 3) {
+            checkSolution();
+            num = 0;
         }
+        if(e.getActionCommand().equals("1")){
+            row = 0;
+        }
+        else if(e.getActionCommand().equals("2")){
+            row = 1;
+        }
+        else if(e.getActionCommand().equals("3")){
+            row = 2;
+        }
+        else if(e.getActionCommand().equals("4")){
+            row = 3;
+        }
+        else if(e.getActionCommand().equals("5")){
+            row = 4;
+        }
+        else if(e.getActionCommand().equals("6")){
+            row = 5;
+        }
+        else if(e.getActionCommand().equals("7")){
+            row = 6;
+        }
+        else{
+            System.out.print("Invalid input, please enter a numbe from 1-7");
+         //   JOptionPane.showMessageDialog(null, "Invalid, please enter a number from 1-7");
+
+        }
+
+
+       // System.out.println("row is: " + row);
+      //  gridButtons[row][curcol].setBackground(Color.RED);
+      curRow = row;
+      for(int i=0; i<7;i++) {
+        if((row < 0) || (row > 7)) {
+                System.out.println("Error, invalid row.");
+            System.exit(0);
+        } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
+            if(playerTurn == false){
+                gridButtons[row][i].setBackground(Color.RED);
+                playerOne.setVisible(false);
+                playerTwo.setVisible(true);
+                checkSolution();
+                playerTurn = true;
+                grid[row][i] = 1;
+                curCol = i;
+                curCheck = 1;
+           // System.out.println("We got hurr");
+                  printGrid();
+                  System.out.println("\n");
+                  round++;
+           // playerOne.setVisible(false);
+           checkSolution();
+            }
+            else if(playerTurn == true){
+                gridButtons[row][i].setBackground(Color.BLUE);
+                playerTwo.setVisible(false);
+                playerOne.setVisible(true);
+                checkSolution();
+                playerTurn = false;
+                grid[row][i] = 2;
+                curCol = i;
+                curCheck = 2;
+                printGrid();
+                System.out.println("\n");
+                round++;
+                checkSolution();
+            }
+/*
+            grid[row][i] = 1;
+            curCol = i;
+            curCheck = 1;
+           // System.out.println("We got hurr");
+
+            printGrid();
+            round++;
+           // playerOne.setVisible(false);*/
+           checkSolution();
+            break;
+        }
+
     }
-     public static void main(String[] args) {
+
+  //  playerTwo.setVisible(true);
+
+}
+
+}
+     public static void main(String[] args) throws IOException {
         grid = new int[7][6];
-        //System.out.println("Player 1 will be represented by 1's, and Player 2 will be represented by 2's");
-        num = 0;
-        round = 1;
+        System.out.println("Player 1 will be represented by 1's, and Player 2 will be represented by 2's");
+
 
         ConnectFour myGui = new ConnectFour();
         
         //where the game takes place
         while(true) {
             //red is player 1
+            printGrid();
             getOneMove(myGui);
-           //printGrid();
+          
+          /* // System.in.read();
             if(round > 3) {
                 checkSolution();
                 num = 0;
             }
             //blue is player 2
-            getTwoMove();
+            getTwoMove(myGui);
             printGrid();
             if(round > 3) {
                 checkSolution();
                 num = 0;
             }
-            round++;
-        }
+            round++;*/
+       }
     }
+   
+    static void getOneMove(ConnectFour gui) throws IOException {
 
-    static void getOneMove(ConnectFour gui) {
-        //ask which row they want to put the coin in -- shown as zeroes on the board
-        //System.out.println("Player 1: What row do you wish to put your coin in? 1-7?");
-        //Scanner input = new Scanner(System.in);
-        int row = 1;
-        row=row-1;
-        //System.out.println("Player 1 stated ROW:" + row);
-
-        curRow = row;
-        for(int i=0;i < 7;i++) {
-            if((row < 0) || (row > 7)) {
-                System.out.println("Error, invalid row.");
-                System.exit(0);
-            } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
-            gui.gridButtons[row][i].setBackground(Color.RED);
-                curCol = i;
-                curCheck = 1;
-                break;
-            }
-        }
-    }
-
-    static void getTwoMove() {
+	    //playerOne.setText("Player 1: Which row do you wish to put your coin in? (1-7)");
+        System.in.read();
+        
+	//    Scanner input = new Scanner(System.in);
+       //gui.panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
+       //gui.panel.getActionMap().put("myAction", playerOneAction);
+	 //   row = input.nextInt();
+        //row=row-1;
+	   // System.out.println("Keycode is:" + playerOneAction.actionPerformed(e.getActionCommand()));
+	  /*gui.panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
+	    gui.panel.getActionMap().put("myAction", playerOneAction);
+	    Action myAction = new myAction();
+	    Action myAction = new AbstractAction() {
+		    public void actionPerformed(ActionEvent e) {
+			    System.out.println("Keystroke is: " + getKeyStroke());
+			    gui.gridButtons[row][i].setBackground(Color.RED);
+		    }
+	    };
+    	    curRow = row;
+	    for(int i=0;i < 7;i++) {
+		    if((row < 0) || (row > 7)) {
+	    		    System.out.println("Error, invalid row.");
+			    System.exit(0);
+		    } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
+			    gui.gridButtons[row][i].setBackground(Color.RED);
+			    curCol = i;
+			    curCheck = 1;
+			    break;
+		    }
+    	    }*/
+    }	
+    
+    static void getTwoMove(ConnectFour gui) throws IOException {
         //ask which row they want to put the coin in -- shown as ones on the board
-        //System.out.println("Player 2: What col do you wish to put your coin in? 1-7?");
-        Scanner input = new Scanner(System.in);
-        int row = input.nextInt();
-        row=row-1;
-        curRow = row;
+       // playerTwo.setText("Player 2: Which row do you wish to put your coin in? (1-7)");
+        System.in.read();
+        //Scanner input = new Scanner(System.in);
+      //  row = input.nextInt();
+       // row=row-1;
+      /*  curRow = row;
         for(int i=0;i < 7;i++) {
             if((row < 0) || (row > 7)) {
                 System.out.println("Error, invalid row.");
@@ -150,7 +258,7 @@ public class ConnectFour {
                 curCheck = 2;
                 break;
             }
-        }
+        }*/
 
     }
 
@@ -280,15 +388,17 @@ public class ConnectFour {
         if(num >= 4) {
             if(curCheck == 1) {
                 //Red wins
+                JOptionPane.showMessageDialog(null, "Player 1 wins!");
                 System.out.println("Player 1 wins!");
                 System.exit(0);
             } else if(curCheck == 2) {
                 //Blue wins
+                JOptionPane.showMessageDialog(null, "Player 2 wins!");
                 System.out.println("Player 2 wins!");
                 System.exit(0);
             }
         }
-    }
+    }/*
 boolean playGame = true;// condition for user to play the game
 
          while (playGame) { 
@@ -305,5 +415,5 @@ boolean playGame = true;// condition for user to play the game
                     bestOf = input.nextLine();
                     bestOfInt = Integer.parseInt(bestOf);
                 }
-        
+        */
 }
