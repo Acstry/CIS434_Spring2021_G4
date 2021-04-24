@@ -1,9 +1,7 @@
 //import java.util.Scanner;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.IOException;
 //import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.*;
 //import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
@@ -22,7 +20,7 @@ public class ConnectFour {
     public static int curCheck; //team currently making a move
     public static int num; //number of concurrent pieces in a row
     public static int round;
-    public JButton gridButtons[][];
+    public RoundedButton gridButtons[][];
     JFrame f;
     JPanel panel;
     boolean playerTurn = false; //false means player one's turn, true means player two's turn
@@ -41,9 +39,11 @@ public class ConnectFour {
         playerAction = new playerAction();
         playerOne.setBounds(150, 10, 350, 30);
         playerOne.setForeground(Color.RED);
+        playerOne.setHorizontalAlignment(JLabel.CENTER);
         playerTwo.setBounds(150, 10, 350, 30);
         playerTwo.setForeground(Color.BLUE);
         playerTwo.setVisible(false);
+        playerTwo.setHorizontalAlignment(JLabel.CENTER);
         playerOne.setVisible(true);
         panel.setLayout(null);
         panel.setBounds(40, 80, 650, 675);
@@ -72,20 +72,20 @@ public class ConnectFour {
         });
 
        //Sets up grid of buttons
-        gridButtons = new JButton[7][6];
+        gridButtons = new RoundedButton[7][6];
         for (int col = 0; col < 6; col++) {
             for (int row = 0; row < 7; row++) {
-                gridButtons[row][col] = new JButton("");
+                gridButtons[row][col] = new RoundedButton("");
                 gridButtons[row][col].setBounds(50 + (row * 80), 550 - (col * 100), 70, 70);
-                gridButtons[row][col].setBackground(Color.LIGHT_GRAY);
-                gridButtons[row][col].setBorder(null);
+                gridButtons[row][col].setBackground(new Color(222,222,222));
+                //gridButtons[row][col].setBorder(null);
                 panel.add(gridButtons[row][col]);
             }
         }
 
         //panel decoration
-        panel.setBackground(Color.WHITE);
-        panel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 10));
+        panel.setBackground(new Color(249,235,77));
+        panel.setBorder(BorderFactory.createLineBorder(new Color(0,0,247), 10));
         f.setSize(800, 800);
         f.add(panel);
         f.setLayout(null);
@@ -426,7 +426,178 @@ public class ConnectFour {
                 System.exit(0);
             }
         }
-    }/*
+    }
+
+    class RoundedButton extends Component {
+
+        ActionListener actionListener;     // Post action events to listeners
+        String label;                      // The Button's text
+        protected boolean pressed = false; // true if the button is detented.
+
+        /**
+         * Constructs a RoundedButton with no label.
+         */
+        public RoundedButton() {
+            this("");
+        }
+
+        /**
+         * Constructs a RoundedButton with the specified label.
+         *
+         * @param label the label of the button
+         */
+        public RoundedButton(String label) {
+            this.label = label;
+            enableEvents(AWTEvent.MOUSE_EVENT_MASK);
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(String label) {
+            this.label = label;
+            invalidate();
+            repaint();
+        }
+
+        /**
+         * paints the RoundedButton
+         */
+        @Override
+        public void paint(Graphics g) {
+
+            // paint the interior of the button
+            if (pressed) {
+                g.setColor(getBackground().darker().darker());
+            } else {
+                g.setColor(getBackground());
+            }
+            g.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 50, 50);
+
+            // draw the perimeter of the button
+            g.setColor(getBackground());
+            g.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 50, 50);
+
+            // draw the label centered in the button
+            Font f = getFont();
+            if (f != null) {
+                FontMetrics fm = getFontMetrics(getFont());
+                g.setColor(getForeground());
+                g.drawString(label, getWidth() / 2 - fm.stringWidth(label) / 2, getHeight() / 2 + fm.getMaxDescent());
+            }
+        }
+
+        /**
+         * The preferred size of the button.
+         */
+        @Override
+        public Dimension getPreferredSize() {
+            Font f = getFont();
+            if (f != null) {
+                FontMetrics fm = getFontMetrics(getFont());
+                int max = Math.max(fm.stringWidth(label) + 40, fm.getHeight() + 40);
+                return new Dimension(max, max);
+            } else {
+                return new Dimension(100, 100);
+            }
+        }
+
+        /**
+         * The minimum size of the button.
+         */
+        @Override
+        public Dimension getMinimumSize() {
+            return new Dimension(100, 100);
+        }
+
+        /**
+         * Adds the specified action listener to receive action events from this
+         * button.
+         *
+         * @param listener the action listener
+         */
+        public void addActionListener(ActionListener listener) {
+            actionListener = AWTEventMulticaster.add(actionListener, listener);
+            enableEvents(AWTEvent.MOUSE_EVENT_MASK);
+        }
+
+        /**
+         * Removes the specified action listener so it no longer receives action
+         * events from this button.
+         *
+         * @param listener the action listener
+         */
+        public void removeActionListener(ActionListener listener) {
+            actionListener = AWTEventMulticaster.remove(actionListener, listener);
+        }
+
+        /**
+         * Determine if click was inside round button.
+         */
+        @Override
+        public boolean contains(int x, int y) {
+            int mx = getSize().width / 2;
+            int my = getSize().height / 2;
+            return (((mx - x) * (mx - x) + (my - y) * (my - y)) <= mx * mx);
+        }
+
+        /**
+         * Paints the button and distribute an action event to all listeners.
+         */
+        @Override
+        public void processMouseEvent(MouseEvent e) {
+            Graphics g;
+            switch (e.getID()) {
+                case MouseEvent.MOUSE_PRESSED:
+                    // render myself inverted....
+                    pressed = true;
+
+                    // Repaint might flicker a bit. To avoid this, you can use
+                    // double buffering (see the Gauge example).
+                    repaint();
+                    break;
+                case MouseEvent.MOUSE_RELEASED:
+                    if (actionListener != null) {
+                        actionListener.actionPerformed(new ActionEvent(
+                                this, ActionEvent.ACTION_PERFORMED, label));
+                    }
+                    // render myself normal again
+                    if (pressed == true) {
+                        pressed = false;
+
+                        // Repaint might flicker a bit. To avoid this, you can use
+                        // double buffering (see the Gauge example).
+                        repaint();
+                    }
+                    break;
+                case MouseEvent.MOUSE_ENTERED:
+
+                    break;
+                case MouseEvent.MOUSE_EXITED:
+                    if (pressed == true) {
+                        // Cancel! Don't send action event.
+                        pressed = false;
+
+                        // Repaint might flicker a bit. To avoid this, you can use
+                        // double buffering (see the Gauge example).
+                        repaint();
+
+                        // Note: for a more complete button implementation,
+                        // you wouldn't want to cancel at this point, but
+                        // rather detect when the mouse re-entered, and
+                        // re-highlight the button. There are a few state
+                        // issues that that you need to handle, which we leave
+                        // this an an excercise for the reader (I always
+                        // wanted to say that!)
+                    }
+                    break;
+            }
+            super.processMouseEvent(e);
+        }
+    }
+
+    /*
 boolean playGame = true;// condition for user to play the game
 
          while (playGame) { 
