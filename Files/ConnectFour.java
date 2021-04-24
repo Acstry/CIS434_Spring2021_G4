@@ -1,9 +1,6 @@
-//import java.util.Scanner;
 import java.awt.event.*;
 import java.io.IOException;
-//import java.awt.event.KeyEvent;
 import java.awt.*;
-//import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
 
 
@@ -17,15 +14,15 @@ public class ConnectFour {
     public static int row;
     public static int col;
     public static int curCol;
-    public static int curCheck; //team currently making a move
+    public static int curCheck; //team currently making a move, 1 is player 1 and 2 is player 2
+    boolean playerTurn = false; //false means player one's turn, true means player two's turn
     public static int num; //number of concurrent pieces in a row
     public static int round;
+
+    //graphics for ConnectFour class
     public RoundedButton gridButtons[][];
     JFrame f;
     JPanel panel;
-    boolean playerTurn = false; //false means player one's turn, true means player two's turn
-    //panel.setFocusable(true);
-    //panel.requestFocusInWindow();
     static JLabel playerOne = new JLabel("Player 1: Which row do you wish to put your coin in? (1-7)");
     static JLabel playerTwo = new JLabel("Player 2: Which row do you wish to put your coin in? (1-7)");
     static Action playerAction;
@@ -40,34 +37,36 @@ public class ConnectFour {
         playerOne.setBounds(150, 10, 350, 30);
         playerOne.setForeground(Color.RED);
         playerOne.setHorizontalAlignment(JLabel.CENTER);
+        playerOne.setVisible(true);
+
         playerTwo.setBounds(150, 10, 350, 30);
         playerTwo.setForeground(Color.BLUE);
-        playerTwo.setVisible(false);
         playerTwo.setHorizontalAlignment(JLabel.CENTER);
-        playerOne.setVisible(true);
+        playerTwo.setVisible(false);
+
+
         panel.setLayout(null);
-        panel.setBounds(40, 80, 650, 675);
+        panel.setBounds(40, 40, 650, 675);
+
+        //checks to see if keys 1-7 are pressed
         panel.addKeyListener(new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {
                 int code = e.getKeyChar();
-                if(code < 49 || code > 55){
-                    JOptionPane.showMessageDialog(null,"invalid input, please enter 1-7");
+                if(code < 49 || code > 55) {
+                    JOptionPane.showMessageDialog(null, "invalid input, please enter 1-7");
                 }
-                
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
                 // TODO Auto-generated method stub
-                
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 // TODO Auto-generated method stub
-                
             }
         });
 
@@ -78,7 +77,6 @@ public class ConnectFour {
                 gridButtons[row][col] = new RoundedButton("");
                 gridButtons[row][col].setBounds(50 + (row * 80), 550 - (col * 100), 70, 70);
                 gridButtons[row][col].setBackground(new Color(222,222,222));
-                //gridButtons[row][col].setBorder(null);
                 panel.add(gridButtons[row][col]);
             }
         }
@@ -111,9 +109,10 @@ public class ConnectFour {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       checkSolution();
-       round = 1;
+        checkSolution();
+        round = 1;
         playerOne.setText("Player 1: Which row do you wish to put your coin in? (1-7)");
+
         if(round > 3) {
             checkSolution();
             num = 0;
@@ -139,169 +138,58 @@ public class ConnectFour {
         else if(e.getActionCommand().equals("7")){
             row = 6;
         }
-      /*  else if(!e.getActionCommand().equals("1") || !e.getActionCommand().equals("2") || e.getActionCommand().equals("3") || !e.getActionCommand().equals("4") 
-        || !e.getActionCommand().equals("5") || !e.getActionCommand().equals("6") || !e.getActionCommand().equals("7")){
-            System.out.print("Invalid input, please enter a numbe from 1-7");
-            JOptionPane.showMessageDialog(null, "Invalid, please enter a number from 1-7");
-        }*/
 
-
-       // System.out.println("row is: " + row);
-      //  gridButtons[row][curcol].setBackground(Color.RED);
-      curRow = row;
-      for(int i=0; i<7;i++) {
-        if((row < 0) || (row > 7)) {
+        curRow = row;
+        for(int i=0; i<7;i++) {
+            if((row < 0) || (row > 7)) {
                 System.out.println("Error, invalid row.");
-            System.exit(0);
-        } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
-            if(playerTurn == false){
-                gridButtons[row][i].setBackground(Color.RED);
-                panel.repaint();
-                playerOne.setVisible(false);
-                playerTwo.setVisible(true);
+                System.exit(0);
+            } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
+                if(!playerTurn){        //player 1's turn
+                    gridButtons[row][i].setBackground(Color.RED);
+                    panel.repaint();
+                    playerOne.setVisible(false);
+                    playerTwo.setVisible(true);
+                    checkSolution();
+                    playerTurn = true;
+                    grid[row][i] = 1;
+                    curCol = i;
+                    curCheck = 1;
+                    round++;
+                    checkSolution();
+                } else if(playerTurn){ //player 2's turn
+                    gridButtons[row][i].setBackground(Color.BLUE);
+                    panel.repaint();
+                    playerTwo.setVisible(false);
+                    playerOne.setVisible(true);
+                    checkSolution();
+                    playerTurn = false;
+                    grid[row][i] = 2;
+                    curCol = i;
+                    curCheck = 2;
+                    round++;
+                    checkSolution();
+                }
+
                 checkSolution();
-                playerTurn = true;
-                grid[row][i] = 1;
-                curCol = i;
-                curCheck = 1;
-           // System.out.println("We got hurr");
-                  printGrid();
-                  System.out.println("\n");
-                  round++;
-           // playerOne.setVisible(false);
-           checkSolution();
+                break;
             }
-            else if(playerTurn == true){
-                gridButtons[row][i].setBackground(Color.BLUE);
-                panel.repaint();
-                playerTwo.setVisible(false);
-                playerOne.setVisible(true);
-                checkSolution();
-                playerTurn = false;
-                grid[row][i] = 2;
-                curCol = i;
-                curCheck = 2;
-                printGrid();
-                System.out.println("\n");
-                round++;
-                checkSolution();
-            }
-/*
-            grid[row][i] = 1;
-            curCol = i;
-            curCheck = 1;
-           // System.out.println("We got hurr");
-            printGrid();
-            round++;
-           // playerOne.setVisible(false);*/
-           checkSolution();
-            break;
         }
-
     }
-
-  //  playerTwo.setVisible(true);
-
-}
 
 }
      public static void main(String[] args) throws IOException {
         grid = new int[7][6];
-        System.out.println("Player 1 will be represented by 1's, and Player 2 will be represented by 2's");
-
 
         ConnectFour myGui = new ConnectFour();
-        
-        //where the game takes place
-        while(true) {
-            //red is player 1
-            printGrid();
-            getOneMove(myGui);
-          
-          /* // System.in.read();
-            if(round > 3) {
-                checkSolution();
-                num = 0;
-            }
-            //blue is player 2
-            getTwoMove(myGui);
-            printGrid();
-            if(round > 3) {
-                checkSolution();
-                num = 0;
-            }
-            round++;*/
-       }
+        getMove(myGui);
+
     }
    
-    static void getOneMove(ConnectFour gui) throws IOException {
+    static void getMove(ConnectFour gui) throws IOException {
 
-	    //playerOne.setText("Player 1: Which row do you wish to put your coin in? (1-7)");
         System.in.read();
-        
-	//    Scanner input = new Scanner(System.in);
-       //gui.panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
-       //gui.panel.getActionMap().put("myAction", playerAction);
-	 //   row = input.nextInt();
-        //row=row-1;
-	   // System.out.println("Keycode is:" + playerAction.actionPerformed(e.getActionCommand()));
-	  /*gui.panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
-	    gui.panel.getActionMap().put("myAction", playerAction);
-	    Action myAction = new myAction();
-	    Action myAction = new AbstractAction() {
-		    public void actionPerformed(ActionEvent e) {
-			    System.out.println("Keystroke is: " + getKeyStroke());
-			    gui.gridButtons[row][i].setBackground(Color.RED);
-		    }
-	    };
-    	    curRow = row;
-	    for(int i=0;i < 7;i++) {
-		    if((row < 0) || (row > 7)) {
-	    		    System.out.println("Error, invalid row.");
-			    System.exit(0);
-		    } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
-			    gui.gridButtons[row][i].setBackground(Color.RED);
-			    curCol = i;
-			    curCheck = 1;
-			    break;
-		    }
-    	    }*/
-    }	
-    
-    static void getTwoMove(ConnectFour gui) throws IOException {
-        //ask which row they want to put the coin in -- shown as ones on the board
-       // playerTwo.setText("Player 2: Which row do you wish to put your coin in? (1-7)");
-        System.in.read();
-        //Scanner input = new Scanner(System.in);
-      //  row = input.nextInt();
-       // row=row-1;
-      /*  curRow = row;
-        for(int i=0;i < 7;i++) {
-            if((row < 0) || (row > 7)) {
-                System.out.println("Error, invalid row.");
-                System.exit(0);
-            } else if ((grid[row][i] != 1) && (grid[row][i] != 2)) {
-                grid[row][i] = 2;
-                curCol = i;
-                curCheck = 2;
-                break;
-            }
-        }*/
 
-    }
-
-    static void printGrid() {
-        //prints the current game board
-        for(int j=5; j >= 0;j--) {
-            for (int i = 0; i < 7; i++) {
-                if((grid[i][j] == 1) || (grid[i][j] == 2)) {
-                    System.out.print(" | " + grid[i][j]);
-                } else {
-                    System.out.print(" |  ");
-                }
-            }
-            System.out.print(" |\n");
-        }
     }
 
     static void checkSolution() {
@@ -417,12 +305,10 @@ public class ConnectFour {
             if(curCheck == 1) {
                 //Red wins
                 JOptionPane.showMessageDialog(null, "Player 1 wins!");
-                System.out.println("Player 1 wins!");
                 System.exit(0);
             } else if(curCheck == 2) {
                 //Blue wins
                 JOptionPane.showMessageDialog(null, "Player 2 wins!");
-                System.out.println("Player 2 wins!");
                 System.exit(0);
             }
         }
