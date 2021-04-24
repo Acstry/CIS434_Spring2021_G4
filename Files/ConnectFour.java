@@ -9,8 +9,11 @@ import javax.swing.*;
 //this program runs a connect four game between two people at the same terminal
 public class ConnectFour {
 
+    public static ConnectFour myGui;
+
 
     public static int bestOf;
+    public static int numGames;
     public static int winsNeeded;
     public static int oneWins;
     public static int twoWins;
@@ -18,7 +21,6 @@ public class ConnectFour {
     public static int[][] grid;
     public static int curRow;
     public static int row;
-    public static int numGames;
     public static int curCol;
     public static int curCheck; //team currently making a move, 1 is player 1 and 2 is player 2
     boolean playerTurn = false; //false means player one's turn, true means player two's turn
@@ -26,9 +28,9 @@ public class ConnectFour {
     public static int round;
 
     //graphics for ConnectFour class
-    public RoundedButton gridButtons[][];
-    static JFrame f;
-    static JPanel panel;
+    public RoundedButton[][] gridButtons;
+    JFrame f;
+    JPanel panel;
     static JLabel bestOfGames = new JLabel("Game one of one");
     static JLabel playerOne = new JLabel("Player 1: Which row do you wish to put your coin in? (1-7)");
     static JLabel playerTwo = new JLabel("Player 2: Which row do you wish to put your coin in? (1-7)");
@@ -36,84 +38,96 @@ public class ConnectFour {
     
 
     ConnectFour() {
-     
-       //Instantiation
-        f = new JFrame("Connect Four");
-        panel = new JPanel();
-       // panel2 = new JPanel();
-        playerAction = new playerAction();
-        playerOne.setBounds(150, 10, 350, 30);
-        playerOne.setForeground(Color.RED);
-        playerOne.setHorizontalAlignment(JLabel.CENTER);
-        playerOne.setVisible(true);
+        if(numGames == 0) {
+            //Instantiation
+            f = new JFrame("Connect Four");
 
-        playerTwo.setBounds(150, 10, 350, 30);
-        playerTwo.setForeground(Color.BLUE);
-        playerTwo.setHorizontalAlignment(JLabel.CENTER);
-        playerTwo.setVisible(false);
+            panel = new JPanel();
+            // panel2 = new JPanel();
+            playerAction = new playerAction();
+            playerOne.setBounds(150, 10, 350, 30);
+            playerOne.setForeground(Color.RED);
+            playerOne.setHorizontalAlignment(JLabel.CENTER);
+            playerOne.setVisible(true);
 
-        bestOfGames.setBounds(300, 25, 100, 30);
+            playerTwo.setBounds(150, 10, 350, 30);
+            playerTwo.setForeground(Color.BLUE);
+            playerTwo.setHorizontalAlignment(JLabel.CENTER);
+            playerTwo.setVisible(false);
+
+            bestOfGames.setBounds(300, 25, 100, 30);
 
 
-        panel.setLayout(null);
-        panel.setBounds(40, 40, 650, 675);
+            panel.setLayout(null);
+            panel.setBounds(40, 40, 650, 675);
 
-        //checks to see if keys 1-7 are pressed
-        panel.addKeyListener(new KeyListener() {
+            //checks to see if keys 1-7 are pressed
+            panel.addKeyListener(new KeyListener() {
 
-            @Override
-            public void keyTyped(KeyEvent e) {
-                int code = e.getKeyChar();
-                if(code < 49 || code > 55) {
-                    JOptionPane.showMessageDialog(null, "invalid input, please enter 1-7");
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    int code = e.getKeyChar();
+                    if (code < 49 || code > 55) {
+                        JOptionPane.showMessageDialog(null, "invalid input, please enter 1-7");
+                    }
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    // TODO Auto-generated method stub
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    // TODO Auto-generated method stub
+                }
+            });
+
+            //Sets up grid of buttons
+            gridButtons = new RoundedButton[7][6];
+            for (int col = 0; col < 6; col++) {
+                for (int row = 0; row < 7; row++) {
+                    gridButtons[row][col] = new RoundedButton("");
+                    gridButtons[row][col].setBounds(50 + (row * 80), 550 - (col * 100), 70, 70);
+                    gridButtons[row][col].setBackground(new Color(222, 222, 222));
+                    panel.add(gridButtons[row][col]);
                 }
             }
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                // TODO Auto-generated method stub
-            }
+            //panel decoration
+            panel.setBackground(new Color(249, 235, 77));
+            panel.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 247), 10));
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-                // TODO Auto-generated method stub
-            }
-        });
+            f.setSize(800, 800);
+            f.setLayout(null);
+            f.setVisible(true);
 
-       //Sets up grid of buttons
-        gridButtons = new RoundedButton[7][6];
-        for (int col = 0; col < 6; col++) {
-            for (int row = 0; row < 7; row++) {
-                gridButtons[row][col] = new RoundedButton("");
-                gridButtons[row][col].setBounds(50 + (row * 80), 550 - (col * 100), 70, 70);
-                gridButtons[row][col].setBackground(new Color(222,222,222));
-                panel.add(gridButtons[row][col]);
+            panel.setVisible(true);
+            f.getContentPane().add(panel);
+
+            panel.add(playerOne);
+            panel.add(playerTwo);
+            panel.add(bestOfGames);
+
+            // User input based actions
+            panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("2"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("3"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("4"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("5"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("6"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("7"), "myAction");
+            panel.getActionMap().put("myAction", playerAction);
+
+            // Ensures program exits when GUI window is closed
+            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        } else {
+            for (int col = 0; col < 6; col++) {
+                for (int row = 0; row < 7; row++) {
+                    gridButtons[row][col].setBackground(new Color(222, 222, 222));
+                }
             }
         }
-
-        //panel decoration
-        panel.setBackground(new Color(249,235,77));
-        panel.setBorder(BorderFactory.createLineBorder(new Color(0,0,247), 10));
-        f.setSize(800, 800);
-        f.add(panel);
-        f.setLayout(null);
-        f.setVisible(true);
-        panel.add(playerOne);
-        panel.add(playerTwo);
-        panel.add(bestOfGames);
-
-        // User input based actions
-        panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
-        panel.getInputMap().put(KeyStroke.getKeyStroke("2"), "myAction");
-        panel.getInputMap().put(KeyStroke.getKeyStroke("3"), "myAction");
-        panel.getInputMap().put(KeyStroke.getKeyStroke("4"), "myAction");
-        panel.getInputMap().put(KeyStroke.getKeyStroke("5"), "myAction");
-        panel.getInputMap().put(KeyStroke.getKeyStroke("6"), "myAction");
-        panel.getInputMap().put(KeyStroke.getKeyStroke("7"), "myAction");
-        panel.getActionMap().put("myAction", playerAction);     
-
-        // Ensures program exits when GUI window is closed
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
     }
 	
   public class playerAction extends AbstractAction{
@@ -202,27 +216,23 @@ public class ConnectFour {
         }
         else if(x == 1){
             bestOf = 3;
-            System.out.print(bestOf);
             bestOfGames.setText("Game " + (numGames+1) +" of " + bestOf);
             winsNeeded = 2;
         }
         else if(x == 2){
             bestOf = 5;
-            System.out.print(bestOf);
             bestOfGames.setText("Game " + (numGames+1) +" of " + bestOf);
             winsNeeded = 3;
         }
 
         grid = new int[7][6];
-        ConnectFour myGui = new ConnectFour();
-        getMove(myGui);
+        myGui = new ConnectFour();
+        getMove();
 
     }
    
-    static void getMove(ConnectFour gui) throws IOException {
-
+    static void getMove() throws IOException {
         System.in.read();
-
     }
 
     static void checkSolution() {
@@ -354,14 +364,19 @@ public class ConnectFour {
             JOptionPane.showMessageDialog(null, "Player 1 wins the series!");
             System.exit(0);
         } else if(twoWins == winsNeeded) {
-            JOptionPane.showMessageDialog(null, "Player 1 wins the series!");
+            JOptionPane.showMessageDialog(null, "Player 2 wins the series!");
             System.exit(0);
         } else {
             numGames++;
             grid = new int[7][6];
-            ConnectFour myGui = new ConnectFour();
+            curRow = 0;
+            row = 0;
+            curCol = 0;
+            curCheck = 1;
+
+            myGui = new ConnectFour();
             try {
-                getMove(myGui);
+                getMove();
             } catch (IOException e) {
                 e.printStackTrace();
             }
