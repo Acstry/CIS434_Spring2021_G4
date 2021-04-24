@@ -11,11 +11,14 @@ public class ConnectFour {
 
 
     public static int bestOf;
+    public static int winsNeeded;
+    public static int oneWins;
+    public static int twoWins;
+
     public static int[][] grid;
     public static int curRow;
     public static int row;
     public static int numGames;
-    public static int col;
     public static int curCol;
     public static int curCheck; //team currently making a move, 1 is player 1 and 2 is player 2
     boolean playerTurn = false; //false means player one's turn, true means player two's turn
@@ -24,9 +27,8 @@ public class ConnectFour {
 
     //graphics for ConnectFour class
     public RoundedButton gridButtons[][];
-    JFrame f;
-    JPanel panel;
-    //JPanel panel2;
+    static JFrame f;
+    static JPanel panel;
     static JLabel bestOfGames = new JLabel("Game one of one");
     static JLabel playerOne = new JLabel("Player 1: Which row do you wish to put your coin in? (1-7)");
     static JLabel playerTwo = new JLabel("Player 2: Which row do you wish to put your coin in? (1-7)");
@@ -35,7 +37,7 @@ public class ConnectFour {
 
     ConnectFour() {
      
-       //Instantiation 
+       //Instantiation
         f = new JFrame("Connect Four");
         panel = new JPanel();
        // panel2 = new JPanel();
@@ -189,37 +191,31 @@ public class ConnectFour {
 
 }
      public static void main(String[] args) throws IOException {
-        grid = new int[7][6];
+
         String[] options = {"1","3","5"};
         numGames = 0;
         int x = JOptionPane.showOptionDialog(null, "Best of how many games?", "Click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
         if(x == 0){
             bestOf = 1;
             bestOfGames.setText("Game " + (numGames+1) +" of " + bestOf);
+            winsNeeded = 1;
         }
         else if(x == 1){
             bestOf = 3;
             System.out.print(bestOf);
             bestOfGames.setText("Game " + (numGames+1) +" of " + bestOf);
-
+            winsNeeded = 2;
         }
         else if(x == 2){
             bestOf = 5;
             System.out.print(bestOf);
             bestOfGames.setText("Game " + (numGames+1) +" of " + bestOf);
-
+            winsNeeded = 3;
         }
-    
 
-       // JOptionPane.showOptionDialog(parentComponent, message, title, optionType, messageType, icon, options, initialValue)
-
+        grid = new int[7][6];
         ConnectFour myGui = new ConnectFour();
-        while(bestOf!= numGames){
-            
-            getMove(myGui);
-
-        }
-
+        getMove(myGui);
 
     }
    
@@ -341,12 +337,33 @@ public class ConnectFour {
         if(num >= 4) {
             if(curCheck == 1) {
                 //Red wins
-                JOptionPane.showMessageDialog(null, "Player 1 wins!");
-                System.exit(0);
+                JOptionPane.showMessageDialog(null, "Player 1 wins game " + (numGames+1) +" of " + bestOf + "!");
+                oneWins++;
+                checkBestOfWins();
             } else if(curCheck == 2) {
                 //Blue wins
-                JOptionPane.showMessageDialog(null, "Player 2 wins!");
-                System.exit(0);
+                JOptionPane.showMessageDialog(null, "Player 2 wins game " + (numGames+1) +" of " + bestOf + "!");
+                twoWins++;
+                checkBestOfWins();
+            }
+        }
+    }
+
+    static void checkBestOfWins() {
+        if(oneWins == winsNeeded) {
+            JOptionPane.showMessageDialog(null, "Player 1 wins the series!");
+            System.exit(0);
+        } else if(twoWins == winsNeeded) {
+            JOptionPane.showMessageDialog(null, "Player 1 wins the series!");
+            System.exit(0);
+        } else {
+            numGames++;
+            grid = new int[7][6];
+            ConnectFour myGui = new ConnectFour();
+            try {
+                getMove(myGui);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
