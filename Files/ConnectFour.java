@@ -28,7 +28,7 @@ public class ConnectFour {
     public static int round;
 
     //graphics for ConnectFour class
-    public RoundedButton[][] gridButtons;
+    RoundedButton[][] gridButtons;
     static JFrame f;
     static JPanel panel;
     static JLabel bestOfGames = new JLabel("Game one of one");
@@ -350,17 +350,17 @@ public class ConnectFour {
                 //Red wins
                 JOptionPane.showMessageDialog(null, "Player 1 wins game " + (numGames+1) +" of " + bestOf + "!");
                 oneWins++;
-                checkBestOfWins();
+                myGui.checkBestOfWins();
             } else if(curCheck == 2) {
                 //Blue wins
                 JOptionPane.showMessageDialog(null, "Player 2 wins game " + (numGames+1) +" of " + bestOf + "!");
                 twoWins++;
-                checkBestOfWins();
+                myGui.checkBestOfWins();
             }
         }
     }
 
-    static void checkBestOfWins() {
+    void checkBestOfWins() {
         if(oneWins == winsNeeded) {
             JOptionPane.showMessageDialog(null, "Player 1 wins the series!");
             System.exit(0);
@@ -374,7 +374,9 @@ public class ConnectFour {
             row = 0;
             curCol = 0;
             curCheck = 1;
-           // myGui.playerTurn = false; //false means player one's turn, true means player two's turn
+            myGui.playerTurn = false;
+            playerTwo.setVisible(false);
+            playerOne.setVisible(true);
             num = 0;
             round = 0;
             panel.removeAll();
@@ -395,26 +397,20 @@ public class ConnectFour {
             panel.getInputMap().put(KeyStroke.getKeyStroke("6"), "myAction");
             panel.getInputMap().put(KeyStroke.getKeyStroke("7"), "myAction");
             panel.getActionMap().put("myAction", playerAction);
-            myGui = new ConnectFour();
+
+            gridButtons = new RoundedButton[7][6];
             for (int col = 0; col < 6; col++) {
                 for (int row = 0; row < 7; row++) {
-                    
-                  // myGui.gridButtons[row][col].setBackground(new Color(222, 222, 222));
-                   //panel.removeAll();
-                  // myGui.gridButtons = new RoundedButton[7][6];
-                  /* for (col = 0; col < 6; col++) {
-                       for (row = 0; row < 7; row++) {
-                           myGui.gridButtons[row][col] = new RoundedButton("");
-                           myGui.gridButtons[row][col].setBounds(50 + (row * 80), 550 - (col * 100), 70, 70);
-                           myGui.gridButtons[row][col].setBackground(new Color(222, 222, 222));
-                           myGui.panel.add(myGui.gridButtons[row][col]);
-                       }
-                   }*/
-                    grid[row][col] = '\0';
-                    
-                   // panel.add(myGui.gridButtons[row][col]);
+                    gridButtons[row][col] = new RoundedButton("");
+                    gridButtons[row][col].setBounds(50 + (row * 80), 550 - (col * 100), 70, 70);
+                    gridButtons[row][col].setBackground(new Color(222, 222, 222));
+                    panel.add(gridButtons[row][col]);
+                    gridButtons[row][col].setVisible(true);
                 }
             }
+
+            myGui = new ConnectFour();
+
             try {
                 getMove();
             } catch (IOException e) {
