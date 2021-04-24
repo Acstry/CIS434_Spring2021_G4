@@ -1,8 +1,9 @@
 //import java.util.Scanner;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 //import java.awt.event.KeyEvent;
-//import java.awt.event.KeyListener;
+import java.awt.event.KeyListener;
 import java.awt.*;
 //import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
@@ -29,15 +30,15 @@ public class ConnectFour {
     //panel.requestFocusInWindow();
     static JLabel playerOne = new JLabel("Player 1: Which row do you wish to put your coin in? (1-7)");
     static JLabel playerTwo = new JLabel("Player 2: Which row do you wish to put your coin in? (1-7)");
-    static Action playerOneAction;
-   // Action playerTwoAction;
+    static Action playerAction;
+    
 
     ConnectFour() {
-      //instantiate 
+
+       //Instantiation 
         f = new JFrame("Connect Four");
         panel = new JPanel();
-        playerOneAction = new playerOneAction();
-      //playerTwoAction = new playerTwoAction();
+        playerAction = new playerAction();
         playerOne.setBounds(150, 10, 350, 30);
         playerOne.setForeground(Color.RED);
         playerTwo.setBounds(150, 10, 350, 30);
@@ -46,7 +47,31 @@ public class ConnectFour {
         playerOne.setVisible(true);
         panel.setLayout(null);
         panel.setBounds(40, 80, 650, 675);
-      //sets up grid of buttons
+        panel.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                int code = e.getKeyChar();
+                if(code < 49 || code > 55){
+                    JOptionPane.showMessageDialog(null,"invalid input, please enter 1-7");
+                }
+                
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
+
+       //Sets up grid of buttons
         gridButtons = new JButton[7][6];
         for (int col = 0; col < 6; col++) {
             for (int row = 0; row < 7; row++) {
@@ -57,6 +82,7 @@ public class ConnectFour {
                 panel.add(gridButtons[row][col]);
             }
         }
+
         //panel decoration
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 10));
@@ -66,6 +92,8 @@ public class ConnectFour {
         f.setVisible(true);
         panel.add(playerOne);
         panel.add(playerTwo);
+
+        // User input based actions
         panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
         panel.getInputMap().put(KeyStroke.getKeyStroke("2"), "myAction");
         panel.getInputMap().put(KeyStroke.getKeyStroke("3"), "myAction");
@@ -73,20 +101,19 @@ public class ConnectFour {
         panel.getInputMap().put(KeyStroke.getKeyStroke("5"), "myAction");
         panel.getInputMap().put(KeyStroke.getKeyStroke("6"), "myAction");
         panel.getInputMap().put(KeyStroke.getKeyStroke("7"), "myAction");
+        panel.getActionMap().put("myAction", playerAction);     
 
-        panel.getActionMap().put("myAction", playerOneAction);      
+        // Ensures program exits when GUI window is closed
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
     }
 	
-  public class playerOneAction extends AbstractAction{
+  public class playerAction extends AbstractAction{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       // getOneMove(e.getKeyStroke());
        checkSolution();
        round = 1;
         playerOne.setText("Player 1: Which row do you wish to put your coin in? (1-7)");
-      //  System.out.println("Keystroke is: " + e.getActionCommand() +"\n");
         if(round > 3) {
             checkSolution();
             num = 0;
@@ -112,11 +139,12 @@ public class ConnectFour {
         else if(e.getActionCommand().equals("7")){
             row = 6;
         }
-        else{
+      /*  else if(!e.getActionCommand().equals("1") || !e.getActionCommand().equals("2") || e.getActionCommand().equals("3") || !e.getActionCommand().equals("4") 
+        || !e.getActionCommand().equals("5") || !e.getActionCommand().equals("6") || !e.getActionCommand().equals("7")){
             System.out.print("Invalid input, please enter a numbe from 1-7");
-         //   JOptionPane.showMessageDialog(null, "Invalid, please enter a number from 1-7");
+            JOptionPane.showMessageDialog(null, "Invalid, please enter a number from 1-7");
 
-        }
+        }*/
 
 
        // System.out.println("row is: " + row);
@@ -213,12 +241,12 @@ public class ConnectFour {
         
 	//    Scanner input = new Scanner(System.in);
        //gui.panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
-       //gui.panel.getActionMap().put("myAction", playerOneAction);
+       //gui.panel.getActionMap().put("myAction", playerAction);
 	 //   row = input.nextInt();
         //row=row-1;
-	   // System.out.println("Keycode is:" + playerOneAction.actionPerformed(e.getActionCommand()));
+	   // System.out.println("Keycode is:" + playerAction.actionPerformed(e.getActionCommand()));
 	  /*gui.panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
-	    gui.panel.getActionMap().put("myAction", playerOneAction);
+	    gui.panel.getActionMap().put("myAction", playerAction);
 	    Action myAction = new myAction();
 	    Action myAction = new AbstractAction() {
 		    public void actionPerformed(ActionEvent e) {
