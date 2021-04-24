@@ -374,17 +374,34 @@ public class ConnectFour {
             row = 0;
             curCol = 0;
             curCheck = 1;
-            myGui.playerTurn = false; //false means player one's turn, true means player two's turn
+           // myGui.playerTurn = false; //false means player one's turn, true means player two's turn
             num = 0;
             round = 0;
             panel.removeAll();
+
+           // panel.add(gridButtons)
+            panel.repaint();
+            panel.revalidate();
+            panel.add(playerOne);
+            panel.add(playerTwo);
+            panel.add(bestOfGames);
+
+            // User input based actions
+            panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("2"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("3"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("4"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("5"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("6"), "myAction");
+            panel.getInputMap().put(KeyStroke.getKeyStroke("7"), "myAction");
+            panel.getActionMap().put("myAction", playerAction);
             myGui = new ConnectFour();
             for (int col = 0; col < 6; col++) {
                 for (int row = 0; row < 7; row++) {
                     
                   // myGui.gridButtons[row][col].setBackground(new Color(222, 222, 222));
-                   panel.removeAll();
-                   myGui.gridButtons = new RoundedButton[7][6];
+                   //panel.removeAll();
+                  // myGui.gridButtons = new RoundedButton[7][6];
                   /* for (col = 0; col < 6; col++) {
                        for (row = 0; row < 7; row++) {
                            myGui.gridButtons[row][col] = new RoundedButton("");
