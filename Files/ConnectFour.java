@@ -143,7 +143,6 @@ public class ConnectFour {
         || !e.getActionCommand().equals("5") || !e.getActionCommand().equals("6") || !e.getActionCommand().equals("7")){
             System.out.print("Invalid input, please enter a numbe from 1-7");
             JOptionPane.showMessageDialog(null, "Invalid, please enter a number from 1-7");
-
         }*/
 
 
@@ -157,6 +156,7 @@ public class ConnectFour {
         } else if((grid[row][i] != 1) && (grid[row][i] != 2)) {
             if(playerTurn == false){
                 gridButtons[row][i].setBackground(Color.RED);
+                panel.repaint();
                 playerOne.setVisible(false);
                 playerTwo.setVisible(true);
                 checkSolution();
@@ -173,6 +173,7 @@ public class ConnectFour {
             }
             else if(playerTurn == true){
                 gridButtons[row][i].setBackground(Color.BLUE);
+                panel.repaint();
                 playerTwo.setVisible(false);
                 playerOne.setVisible(true);
                 checkSolution();
@@ -190,7 +191,6 @@ public class ConnectFour {
             curCol = i;
             curCheck = 1;
            // System.out.println("We got hurr");
-
             printGrid();
             round++;
            // playerOne.setVisible(false);*/
@@ -599,7 +599,6 @@ public class ConnectFour {
 
     /*
 boolean playGame = true;// condition for user to play the game
-
          while (playGame) { 
  
             System.out.print("How many games would you like to play the best of (best of 3, 5...): ");
