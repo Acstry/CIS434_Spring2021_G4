@@ -31,15 +31,18 @@ public class ConnectFour {
     RoundedButton[][] gridButtons;
     static JFrame f;
     static JPanel panel;
-    static JLabel bestOfGames = new JLabel("Game one of one");
-    static JLabel playerOne = new JLabel("Player 1: Which row do you wish to put your coin in? (1-7)");
-    static JLabel playerTwo = new JLabel("Player 2: Which row do you wish to put your coin in? (1-7)");
+    static JLabel bestOfGames = new JLabel("");
+    static JLabel playerOne = new JLabel("Which row do you wish to put your coin in? (1-7)");
+    static JLabel playerTwo = new JLabel("Which row do you wish to put your coin in? (1-7)");
     static Action playerAction;
+    static JLabel playerOneTurn = new JLabel("Player 1's Turn");
+    static JLabel playerTwoTurn = new JLabel("Player 2's Turn");
     
 
     ConnectFour() {
         if(numGames == 0) {
             //Instantiation
+            row = 0;
             f = new JFrame("Connect Four");
 
             panel = new JPanel();
@@ -49,13 +52,19 @@ public class ConnectFour {
             playerOne.setForeground(Color.RED);
             playerOne.setHorizontalAlignment(JLabel.CENTER);
             playerOne.setVisible(true);
+            playerOneTurn.setVisible(true);
+            playerOneTurn.setBounds(525, 10, 350,30);
+            playerOneTurn.setForeground(Color.RED);
 
             playerTwo.setBounds(150, 10, 350, 30);
             playerTwo.setForeground(Color.BLUE);
             playerTwo.setHorizontalAlignment(JLabel.CENTER);
             playerTwo.setVisible(false);
+            playerTwoTurn.setVisible(false);
+            playerTwoTurn.setBounds(525, 10, 350,30);
+            playerTwoTurn.setForeground(Color.BLUE);
 
-            bestOfGames.setBounds(300, 25, 100, 30);
+            bestOfGames.setBounds(35, 10, 350, 30);
 
 
             panel.setLayout(null);
@@ -108,6 +117,8 @@ public class ConnectFour {
             panel.add(playerOne);
             panel.add(playerTwo);
             panel.add(bestOfGames);
+            panel.add(playerOneTurn);
+            panel.add(playerTwoTurn);
 
             // User input based actions
             panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
@@ -138,7 +149,7 @@ public class ConnectFour {
         
         checkSolution();
         round = 1;
-        playerOne.setText("Player 1: Which row do you wish to put your coin in? (1-7)");
+        playerOne.setText("Which row do you wish to put your coin in? (1-7)");
 
         if(round > 3) {
             checkSolution();
@@ -176,7 +187,9 @@ public class ConnectFour {
                     gridButtons[row][i].setBackground(Color.RED);
                     panel.repaint();
                     playerOne.setVisible(false);
+                    playerOneTurn.setVisible(false);
                     playerTwo.setVisible(true);
+                    playerTwoTurn.setVisible(true);
                     checkSolution();
                     playerTurn = true;
                     grid[row][i] = 1;
@@ -188,6 +201,8 @@ public class ConnectFour {
                     gridButtons[row][i].setBackground(Color.BLUE);
                     panel.repaint();
                     playerTwo.setVisible(false);
+                    playerTwoTurn.setVisible(false);
+                    playerOneTurn.setVisible(true);
                     playerOne.setVisible(true);
                     checkSolution();
                     playerTurn = false;
