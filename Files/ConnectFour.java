@@ -29,8 +29,8 @@ public class ConnectFour {
 
     //graphics for ConnectFour class
     public RoundedButton[][] gridButtons;
-    JFrame f;
-    JPanel panel;
+    static JFrame f;
+    static JPanel panel;
     static JLabel bestOfGames = new JLabel("Game one of one");
     static JLabel playerOne = new JLabel("Player 1: Which row do you wish to put your coin in? (1-7)");
     static JLabel playerTwo = new JLabel("Player 2: Which row do you wish to put your coin in? (1-7)");
@@ -125,6 +125,7 @@ public class ConnectFour {
             for (int col = 0; col < 6; col++) {
                 for (int row = 0; row < 7; row++) {
                     gridButtons[row][col].setBackground(new Color(222, 222, 222));
+                    grid[row][col] = '\0';
                 }
             }
         }
@@ -373,6 +374,9 @@ public class ConnectFour {
             row = 0;
             curCol = 0;
             curCheck = 1;
+            myGui.playerTurn = false; //false means player one's turn, true means player two's turn
+            num = 0;
+            round = 0;
 
             myGui = new ConnectFour();
             try {
