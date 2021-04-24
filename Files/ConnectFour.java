@@ -9,9 +9,12 @@ import javax.swing.*;
 //this program runs a connect four game between two people at the same terminal
 public class ConnectFour {
 
+
+    public static int bestOf;
     public static int[][] grid;
     public static int curRow;
     public static int row;
+    public static int numGames;
     public static int col;
     public static int curCol;
     public static int curCheck; //team currently making a move, 1 is player 1 and 2 is player 2
@@ -29,7 +32,7 @@ public class ConnectFour {
     
 
     ConnectFour() {
-
+     
        //Instantiation 
         f = new JFrame("Connect Four");
         panel = new JPanel();
@@ -109,6 +112,7 @@ public class ConnectFour {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
         checkSolution();
         round = 1;
         playerOne.setText("Player 1: Which row do you wish to put your coin in? (1-7)");
@@ -180,9 +184,33 @@ public class ConnectFour {
 }
      public static void main(String[] args) throws IOException {
         grid = new int[7][6];
+        String[] options = {"1","3","5"};
+        numGames = 0;
+        int x = JOptionPane.showOptionDialog(null, "Best of how many games?", "Click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        if(x == 0){
+            bestOf = 1;
+            System.out.print(bestOf);
+        }
+        else if(x == 1){
+            bestOf = 3;
+            System.out.print(bestOf);
+
+        }
+        else if(x == 2){
+            bestOf = 5;
+            System.out.print(bestOf);
+
+        }
+    
+
+       // JOptionPane.showOptionDialog(parentComponent, message, title, optionType, messageType, icon, options, initialValue)
 
         ConnectFour myGui = new ConnectFour();
-        getMove(myGui);
+        while(bestOf!= numGames){
+            getMove(myGui);
+
+        }
+        
 
     }
    
