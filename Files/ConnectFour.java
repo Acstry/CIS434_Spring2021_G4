@@ -18,8 +18,6 @@ public class ConnectFour {
     public static int oneWins;
     public static int twoWins;
 
-    public static int labelOneWins;
-    public static int labelTwoWins;
     public static int[][] grid;
     public static int curRow;
     public static int row;
@@ -39,8 +37,8 @@ public class ConnectFour {
     static Action playerAction;
     static JLabel playerOneTurn = new JLabel("Player 1's Turn");
     static JLabel playerTwoTurn = new JLabel("Player 2's Turn");
-    static JLabel playerOneWins = new JLabel("Player 1 wins: " + labelOneWins);
-    static JLabel playerTwoWins = new JLabel("Player 1 wins: " + labelTwoWins);
+    static JLabel playerOneWins = new JLabel("Player 1 Wins: " + oneWins);
+    static JLabel playerTwoWins = new JLabel("Player 2 Wins: " + twoWins);
 
     
 
@@ -380,13 +378,11 @@ public class ConnectFour {
                 //Red wins
                 JOptionPane.showMessageDialog(null, "Player 1 wins game " + (numGames+1) +" of " + bestOf + "!");
                 oneWins++;
-                labelOneWins = oneWins;
                 myGui.checkBestOfWins();
             } else if(curCheck == 2) {
                 //Blue wins
                 JOptionPane.showMessageDialog(null, "Player 2 wins game " + (numGames+1) +" of " + bestOf + "!");
                 twoWins++;
-                labelTwoWins = twoWins;
                 myGui.checkBestOfWins();
             }
         }
@@ -414,6 +410,9 @@ public class ConnectFour {
             panel.removeAll();
 
            // panel.add(gridButtons)
+            playerOneWins.setText("Player 1 Wins: " + oneWins);
+            playerTwoWins.setText("Player 2 Wins: " + twoWins);
+            bestOfGames.setText("Game " + (numGames+1) +" of " + bestOf);
             panel.repaint();
             panel.revalidate();
             panel.add(playerOne);
