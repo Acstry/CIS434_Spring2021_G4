@@ -26,6 +26,8 @@ public class ConnectFour {
     public RoundedButton gridButtons[][];
     JFrame f;
     JPanel panel;
+    //JPanel panel2;
+    static JLabel bestOfGames = new JLabel("Game one of one");
     static JLabel playerOne = new JLabel("Player 1: Which row do you wish to put your coin in? (1-7)");
     static JLabel playerTwo = new JLabel("Player 2: Which row do you wish to put your coin in? (1-7)");
     static Action playerAction;
@@ -36,6 +38,7 @@ public class ConnectFour {
        //Instantiation 
         f = new JFrame("Connect Four");
         panel = new JPanel();
+       // panel2 = new JPanel();
         playerAction = new playerAction();
         playerOne.setBounds(150, 10, 350, 30);
         playerOne.setForeground(Color.RED);
@@ -46,6 +49,8 @@ public class ConnectFour {
         playerTwo.setForeground(Color.BLUE);
         playerTwo.setHorizontalAlignment(JLabel.CENTER);
         playerTwo.setVisible(false);
+
+        bestOfGames.setBounds(300, 25, 100, 30);
 
 
         panel.setLayout(null);
@@ -93,6 +98,7 @@ public class ConnectFour {
         f.setVisible(true);
         panel.add(playerOne);
         panel.add(playerTwo);
+        panel.add(bestOfGames);
 
         // User input based actions
         panel.getInputMap().put(KeyStroke.getKeyStroke("1"), "myAction");
@@ -189,16 +195,18 @@ public class ConnectFour {
         int x = JOptionPane.showOptionDialog(null, "Best of how many games?", "Click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
         if(x == 0){
             bestOf = 1;
-            System.out.print(bestOf);
+            bestOfGames.setText("Game " + (numGames+1) +" of " + bestOf);
         }
         else if(x == 1){
             bestOf = 3;
             System.out.print(bestOf);
+            bestOfGames.setText("Game " + (numGames+1) +" of " + bestOf);
 
         }
         else if(x == 2){
             bestOf = 5;
             System.out.print(bestOf);
+            bestOfGames.setText("Game " + (numGames+1) +" of " + bestOf);
 
         }
     
@@ -207,10 +215,11 @@ public class ConnectFour {
 
         ConnectFour myGui = new ConnectFour();
         while(bestOf!= numGames){
+            
             getMove(myGui);
 
         }
-        
+
 
     }
    
