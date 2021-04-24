@@ -377,8 +377,27 @@ public class ConnectFour {
             myGui.playerTurn = false; //false means player one's turn, true means player two's turn
             num = 0;
             round = 0;
-
+            panel.removeAll();
             myGui = new ConnectFour();
+            for (int col = 0; col < 6; col++) {
+                for (int row = 0; row < 7; row++) {
+                    
+                  // myGui.gridButtons[row][col].setBackground(new Color(222, 222, 222));
+                   panel.removeAll();
+                   myGui.gridButtons = new RoundedButton[7][6];
+                  /* for (col = 0; col < 6; col++) {
+                       for (row = 0; row < 7; row++) {
+                           myGui.gridButtons[row][col] = new RoundedButton("");
+                           myGui.gridButtons[row][col].setBounds(50 + (row * 80), 550 - (col * 100), 70, 70);
+                           myGui.gridButtons[row][col].setBackground(new Color(222, 222, 222));
+                           myGui.panel.add(myGui.gridButtons[row][col]);
+                       }
+                   }*/
+                    grid[row][col] = '\0';
+                    
+                   // panel.add(myGui.gridButtons[row][col]);
+                }
+            }
             try {
                 getMove();
             } catch (IOException e) {
